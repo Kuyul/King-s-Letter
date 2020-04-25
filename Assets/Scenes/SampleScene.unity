@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -397,7 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eac3c3cd552605b45add5d97c96342ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Letter: {fileID: 4190179625711335793, guid: 963d119f1b0a1e94cae27c24b4f5f933, type: 3}
+  Letter: {fileID: 100002, guid: f444259059aec43feb9f6981534fa3bb, type: 3}
   StampPos:
   - {fileID: 1801959643}
   - {fileID: 552484610}
@@ -405,13 +405,10 @@ MonoBehaviour:
   - {fileID: 1996328218}
   LetterPos: {fileID: 335617556}
   Stamps:
-  - {fileID: 3921259078436192858, guid: 850d8c20de98de049a1df8808a349561, type: 3}
-  - {fileID: 3921259078436192858, guid: 2fcf946b185530a4da9f187b666d2b2c, type: 3}
-  - {fileID: 3921259078436192858, guid: d5dfe76dbe21e2847a6d1370a1610e46, type: 3}
-  - {fileID: 3921259078436192858, guid: dd7130534df480a4bb82526be3d3b00f, type: 3}
-  - {fileID: 3921259078436192858, guid: f2e5984a4f94908428414e0bee0cd7f8, type: 3}
-  - {fileID: 3921259078436192858, guid: 47ff59bf95f2b5d47968a7819ab381d8, type: 3}
-  - {fileID: 3921259078436192858, guid: 9766cd95c9f975543b3af807f6538639, type: 3}
+  - {fileID: 4599426950788719587, guid: 8673625a083de41d8983431f6cb2ba6d, type: 3}
+  - {fileID: 7821745233961814445, guid: f88831e3e6dbd41be96cd6c9bdbb0b07, type: 3}
+  - {fileID: 5966228152727820804, guid: 183c034e372c14495a3728173ff3f4f5, type: 3}
+  - {fileID: 6228776863579266164, guid: 74b1b944b4c884839b8059cf46946322, type: 3}
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
