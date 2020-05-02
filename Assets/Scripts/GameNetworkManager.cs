@@ -14,9 +14,20 @@ using UnityEngine.SceneManagement;
 
 public class GameNetworkManager : NetworkManager
 {
+    public static GameNetworkManager instance;
     private bool isHeadlessServer = false;
     private bool isGameliftServer = false;
     private static int LISTEN_PORT = 7777;
+    public bool mainClient = false;
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,8 +38,9 @@ public class GameNetworkManager : NetworkManager
             Debug.Log("** SERVER MODE **");
             isHeadlessServer = true;
             SetupServerAndGamelift();
-        } else if (PlayerPrefs.GetInt("MainClient", 1) == 1)
+        } else if (PlayerPrefs.GetInt("MainClient") == 1)
         {
+            mainClient = true;
             SetupMainClient();
         } else
         {
@@ -36,9 +48,16 @@ public class GameNetworkManager : NetworkManager
         }
     }
 
+    //Tick the tickbox on the main menu to connect locally.
     private void SetupController()
     {
-        FindMatch();
+        if (PlayerPrefs.GetInt("ShowUnityHUD", 1) == 0)
+        {
+            FindMatch();
+        } else
+        {
+            ConnectLocal();
+        }
     }
 
     private void SetupMainClient()
@@ -51,8 +70,15 @@ public class GameNetworkManager : NetworkManager
         }
     }
 
+    private void ConnectLocal()
+    {
+        networkAddress = "localhost";
+        networkPort = 7777;
+        StartClient();
+    }
 
-    public void FindMatch()
+
+    private void FindMatch()
     {
         Debug.Log("Reaching out to client service Lambda function");
 
@@ -108,12 +134,6 @@ public class GameNetworkManager : NetworkManager
                     //uiController.SetStatusText($"Client service failed: {response.Exception}");
                 }
             });
-    }
-
-    // This is called on the server when a client connects
-    public override void OnServerConnect(NetworkConnection conn)
-    {
-        
     }
 
     private void SetupServerAndGamelift()

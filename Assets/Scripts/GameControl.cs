@@ -9,6 +9,8 @@ public class GameControl : NetworkBehaviour
     public static GameControl instance;
     public TextMesh showText;
     public UIController uiController;
+    public GameObject postLoad;
+    public GameObject waiting;
 
     private List<PlayerController> playerList = new List<PlayerController>();
 
@@ -33,12 +35,20 @@ public class GameControl : NetworkBehaviour
         }
     }
 
+    //Called from the player controller class
     public void AddPlayer(PlayerController playerController)
     {
         var count = playerList.Count;
         var name = adjectives[Random.Range(0, adjectives.Count - 1)];
         RpcAddPlayer(count, name);
         playerList.Add(playerController);
+    }
+
+    //Called when start game button is pressed
+    public void StartGame()
+    {
+        waiting.SetActive(false);
+        postLoad.SetActive(true);
     }
 
     [ClientRpc]

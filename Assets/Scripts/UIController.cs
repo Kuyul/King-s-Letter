@@ -26,6 +26,11 @@ public class UIController : MonoBehaviour
         netHUD.showGUI = false;
     }
 
+    public void StartGame()
+    {
+        GameControl.instance.StartGame();
+    }
+
     public void AddNewPlayer(int count, string name)
     {
         playerSlots[count].text = name;

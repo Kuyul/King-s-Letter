@@ -19,15 +19,10 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void JoinMatch()
     {
         PlayerPrefs.SetInt("ShowUnityHUD", tglNetworkHUD.isOn ? 1 : 0);
+        PlayerPrefs.SetInt("MainClient", 1);
         StartCoroutine(LoadGameScene());
     }
 
@@ -43,6 +38,7 @@ public class MainMenuController : MonoBehaviour
     public void InitiateController()
     {
         PlayerPrefs.SetInt("ShowUnityHUD", 0);
+        PlayerPrefs.SetInt("MainClient", 0);
         StartCoroutine(LoadController());
     }
 

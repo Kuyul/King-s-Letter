@@ -11,21 +11,21 @@ public class PlayerController : NetworkBehaviour
 
         if (isServer)
         {
-            GameControl.instance.AddPlayer(this);
+            if (!GameNetworkManager.instance.mainClient)
+            {
+                GameControl.instance.AddPlayer(this);
+            }
         }
     }
     
     private void Start()
     {
-        if (isLocalPlayer)
+        if (isClient)
         {
-            if (isClient)
+            if (isLocalPlayer && !GameNetworkManager.instance.mainClient)
             {
                 Debug.Log("Is localplayer:" + isLocalPlayer);
-                if (isLocalPlayer)
-                {
-                    LocalController.instance.SetLocalPlayer(this);
-                }
+                LocalController.instance.SetLocalPlayer(this);
             }
         }
     }
