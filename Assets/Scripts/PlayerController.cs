@@ -14,4 +14,43 @@ public class PlayerController : NetworkBehaviour
             GameControl.instance.AddPlayer(this);
         }
     }
+    
+    private void Start()
+    {
+        if (isLocalPlayer)
+        {
+            if (isClient)
+            {
+                Debug.Log("Is localplayer:" + isLocalPlayer);
+                if (isLocalPlayer)
+                {
+                    LocalController.instance.SetLocalPlayer(this);
+                }
+            }
+        }
+    }
+
+    [Command]
+    public void CmdButtonA()
+    {
+        GameControl.instance.RpcButtonA();
+    }
+
+    [Command]
+    public void CmdButtonB()
+    {
+        GameControl.instance.RpcButtonB();
+    }
+
+    [Command]
+    public void CmdButtonC()
+    {
+        GameControl.instance.RpcButtonC();
+    }
+
+    [Command]
+    public void CmdButtonD()
+    {
+        GameControl.instance.RpcButtonD();
+    }
 }

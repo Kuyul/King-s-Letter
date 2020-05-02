@@ -565,10 +565,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Letter: {fileID: 1210070218429594389, guid: a4beca013354bbf41abd9617e3b2b063, type: 3}
-  ButtonPos: []
+  ButtonPos:
+  - {fileID: 1801959643}
+  - {fileID: 552484610}
+  - {fileID: 1058640404}
+  - {fileID: 1996328218}
   LetterPos: {fileID: 335617556}
   stampOffsetZ: 0
-  MultiChoiceButtons: []
+  MultiChoiceButtons:
+  - {fileID: 7859266403048758510, guid: 9bbb413af5f614c02bf4b8986a8253f5, type: 3}
+  - {fileID: 3638979752728789640, guid: a4d71f5c64ec3448e9740ae51ca09968, type: 3}
+  - {fileID: 2437891091266165893, guid: 48242c505e0114cc0851948ad14a53af, type: 3}
+  - {fileID: 8358272015595310286, guid: 4a405f306da584823ad9011b09bc1a7f, type: 3}
   Stamps:
   - {fileID: 3508941418673692207, guid: 8e9c510f8a7933d419c4a72aaa6a0423, type: 3}
   - {fileID: 3508941418673692207, guid: 5a109d5456703aa4f82bbc3f979608e9, type: 3}

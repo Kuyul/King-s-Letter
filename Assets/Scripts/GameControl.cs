@@ -36,13 +36,39 @@ public class GameControl : NetworkBehaviour
     public void AddPlayer(PlayerController playerController)
     {
         var count = playerList.Count;
-        RpcAddPlayer(count);
+        var name = adjectives[Random.Range(0, adjectives.Count - 1)];
+        RpcAddPlayer(count, name);
         playerList.Add(playerController);
     }
 
     [ClientRpc]
-    private void RpcAddPlayer(int count)
+    private void RpcAddPlayer(int count, string name)
     {
         uiController.AddNewPlayer(count, name);
+    }
+
+    //Deeclare input Rpcs
+    [ClientRpc]
+    public void RpcButtonA()
+    {
+        Debug.Log("Input A Pressed!");
+    }
+
+    [ClientRpc]
+    public void RpcButtonB()
+    {
+        Debug.Log("Input B Pressed!");
+    }
+
+    [ClientRpc]
+    public void RpcButtonC()
+    {
+        Debug.Log("Input C Pressed!");
+    }
+
+    [ClientRpc]
+    public void RpcButtonD()
+    {
+        Debug.Log("Input D Pressed!");
     }
 }
