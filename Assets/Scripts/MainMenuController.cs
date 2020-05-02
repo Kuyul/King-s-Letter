@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MainMenuController : MonoBehaviour
 {
     public Toggle tglNetworkHUD;
+    public Toggle controller;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +34,21 @@ public class MainMenuController : MonoBehaviour
     private IEnumerator LoadGameScene()
     {
         var asyncload = SceneManager.LoadSceneAsync("MainClient");
+        while (!asyncload.isDone)
+        {
+            yield return null;
+        }
+    }
+
+    public void InitiateController()
+    {
+        PlayerPrefs.SetInt("ShowUnityHUD", 0);
+        StartCoroutine(LoadController());
+    }
+
+    private IEnumerator LoadController()
+    {
+        var asyncload = SceneManager.LoadSceneAsync("Controller");
         while (!asyncload.isDone)
         {
             yield return null;

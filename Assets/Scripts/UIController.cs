@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class UIController : MonoBehaviour
 {
-    public Text txtStatus;
+    public Text connection;
+    public List<Text> playerSlots;
 
     public GameNetworkManager gameNetworkManager;
 
@@ -18,47 +19,15 @@ public class UIController : MonoBehaviour
         // default to 1 so if the scene is started in editor, debug HUD shows
         netHUD.showGUI = PlayerPrefs.GetInt("ShowUnityHUD", 1) == 1;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    
     private void OnDisable()
     {
         var netHUD = gameNetworkManager.GetComponent<NetworkManagerHUD>();
         netHUD.showGUI = false;
     }
 
-    public void ShowStatusText()
+    public void AddNewPlayer(int count, string name)
     {
-        txtStatus.gameObject.SetActive(true);
-    }
-
-    public void HideStatusText()
-    {
-        txtStatus.gameObject.SetActive(false);
-    }
-
-    public void SetStatusText(string newText)
-    {
-        txtStatus.text = newText;
-    }
-
-    public void QuitToMainMenu()
-    {
-        gameNetworkManager.StopClient();
-
-        StartCoroutine(LoadMenuScene());
-    }
-
-    private IEnumerator LoadMenuScene()
-    {
-        var asyncload = SceneManager.LoadSceneAsync("MainMenu");
-        while (!asyncload.isDone)
-        {
-            yield return null;
-        }
+        playerSlots[count].text = name;
     }
 }

@@ -27,13 +27,21 @@ public class GameNetworkManager : NetworkManager
             Debug.Log("** SERVER MODE **");
             isHeadlessServer = true;
             SetupServerAndGamelift();
+        } else if (PlayerPrefs.GetInt("MainClient", 1) == 1)
+        {
+            SetupMainClient();
         } else
         {
-            SetupClient();
+            SetupController();
         }
     }
 
-    private void SetupClient()
+    private void SetupController()
+    {
+        FindMatch();
+    }
+
+    private void SetupMainClient()
     {
         // in debug mode don't attempt to match with GameLift
         if (PlayerPrefs.GetInt("ShowUnityHUD", 1) == 0)
@@ -76,6 +84,7 @@ public class GameNetworkManager : NetworkManager
                         networkAddress = "localhost";
                         networkPort = 7777;
                         StartClient();
+                        GameControl.instance.uiController.connection.text = "connected to " + networkAddress + " " + networkPort;
                         /*
                         var connectionObj = JsonUtility.FromJson<ConnectionObject>(payload);
 
@@ -99,6 +108,12 @@ public class GameNetworkManager : NetworkManager
                     //uiController.SetStatusText($"Client service failed: {response.Exception}");
                 }
             });
+    }
+
+    // This is called on the server when a client connects
+    public override void OnServerConnect(NetworkConnection conn)
+    {
+        
     }
 
     private void SetupServerAndGamelift()
