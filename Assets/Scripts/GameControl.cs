@@ -6,6 +6,7 @@ public class GameControl : MonoBehaviour
 {
     //Making this a static varible makes the components of this code visible for every other Unity code
     public static GameControl instance;
+    public TextMesh showText;
 
     private void Awake()
     {

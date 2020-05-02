@@ -23,7 +23,9 @@ public class Touch : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, float.MaxValue, 1 << LayerMask.NameToLayer("Stamp")))
         {
-            Debug.Log("Touched " + hit.transform.gameObject.name);
+            var message = "Touched " + hit.transform.gameObject.name;
+            Debug.Log(message);
+            GameControl.instance.showText.text = message;
         }
     }
 
