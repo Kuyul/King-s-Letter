@@ -23,7 +23,20 @@ public class Touch : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, float.MaxValue, 1 << LayerMask.NameToLayer("Stamp")))
         {
-            Debug.Log("Touched " + hit.transform.gameObject.name);
+            Debug.Log("You touched " + hit.transform.gameObject.name);
+            var selectedStampName = hit.transform.gameObject.name;
+
+            GameObject levelControl = GameObject.Find("LevelControl");
+            LevelControl levelControlScript = levelControl.GetComponent<LevelControl>();
+            var levelStamp = levelControlScript.getLevelStamp();
+
+            if (levelStamp.name.Equals(selectedStampName))
+            {
+                print("CORRECT!");
+            } else
+            {
+                print("WRONG!");
+            }
         }
     }
 
