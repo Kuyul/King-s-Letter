@@ -8,7 +8,7 @@ public class LocalController : MonoBehaviour
     public static LocalController instance;
     public GameNetworkManager networkManager;
     public Text info;
-    private PlayerController player;
+    private GamePlayerController player;
 
     private void Awake()
     {
@@ -22,7 +22,7 @@ public class LocalController : MonoBehaviour
         }
     }
 
-    public void SetLocalPlayer(PlayerController p)
+    public void SetLocalPlayer(GamePlayerController p)
     {
         player = p;
         info.text = "connected to " + networkManager.networkAddress + ", port: " + networkManager.networkPort;

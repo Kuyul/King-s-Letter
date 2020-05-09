@@ -16,6 +16,8 @@ public class LevelControl : MonoBehaviour
     public List<GameObject> Stamps;
 
     private GameObject levelStamp;
+    private string correctAnswer;
+    private string[] answerChoices = { "A", "B", "C", "D" };
 
     private void Awake()
     {
@@ -25,9 +27,9 @@ public class LevelControl : MonoBehaviour
         }
     }
 
-    public GameObject getLevelStamp()
+    public string GetCorrectAnswer()
     {
-        return levelStamp;
+        return correctAnswer;
     }
 
     // Start is called before the first frame update
@@ -39,7 +41,7 @@ public class LevelControl : MonoBehaviour
         // Selects random stamp to be this level's levelStamp
         var levelStampIndex = Random.Range(0, Stamps.Count);
         levelStamp = Stamps[levelStampIndex];
-        levelStamp.gameObject.name = levelStampIndex.ToString();
+        correctAnswer = answerChoices[levelStampIndex];
 
         // Gives the levelStamp a random rotation (90, 180, 270)
         var randomRotationAmount = Random.Range(1, 4);
@@ -56,19 +58,13 @@ public class LevelControl : MonoBehaviour
             var multiChoiceButtonObj = MultiChoiceButtons[i];
             var multiChoiceButtonPos = ButtonPos[i];
             var multiChoiceButton = Instantiate(multiChoiceButtonObj, multiChoiceButtonPos.transform);
-            multiChoiceButton.name = i.ToString();
-
         }
 
         //Go through the list of preset spawn positions and instantiate the letter at those positions
         //Letter must be created from a prefab - To create any gameobject from heirarcy as a prefab, just drag them into the Prefab folder
         for (var i = 0; i < ButtonPos.Length; i++)
         {
-            //Get Random stamp index
-            var ran = Random.Range(0, Stamps.Count);
-            var stampObj = Stamps[ran];
-            //Remove the stamp at pos because we don't want more than one of the same type to be instantiated
-            Stamps.RemoveAt(ran);
+            var stampObj = Stamps[i];
 
             // Do this to get any component out of Gameobjects e.g. switch Transform to Collider if you want to get the collider
             var stampPos = ButtonPos[i].GetComponent<Transform>();
@@ -77,13 +73,5 @@ public class LevelControl : MonoBehaviour
 
             Instantiate(stampObj, stampPos);
         }
-    }
-
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

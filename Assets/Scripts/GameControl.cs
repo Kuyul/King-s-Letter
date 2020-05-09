@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class GameControl : NetworkBehaviour
 {
     //Making this a static varible makes the components of this code visible for every other Unity code
     public static GameControl instance;
-    public TextMesh showText;
     public UIController uiController;
     public GameObject postLoad;
     public GameObject waiting;
+    public LevelControl levelController;
 
-    private List<PlayerController> playerList = new List<PlayerController>();
+    private List<GamePlayerController> playerList = new List<GamePlayerController>();
 
     private List<string> adjectives = new List<string>
     {
@@ -35,15 +36,6 @@ public class GameControl : NetworkBehaviour
         }
     }
 
-    //Called from the player controller class
-    public void AddPlayer(PlayerController playerController)
-    {
-        var count = playerList.Count;
-        var name = adjectives[Random.Range(0, adjectives.Count - 1)];
-        RpcAddPlayer(count, name);
-        playerList.Add(playerController);
-    }
-
     //Called when start game button is pressed
     public void StartGame()
     {
@@ -51,34 +43,87 @@ public class GameControl : NetworkBehaviour
         postLoad.SetActive(true);
     }
 
-    [ClientRpc]
-    private void RpcAddPlayer(int count, string name)
+    //Called from the player controller class
+    public void AddPlayer(GamePlayerController player)
     {
-        uiController.AddNewPlayer(count, name);
+        var count = playerList.Count;
+        var name = adjectives[Random.Range(0, adjectives.Count - 1)];
+        player.playerName = name;
+        playerList.Add(player);
+        RpcAddPlayer(player.id, player.playerName);
+    }
+    [ClientRpc]
+    private void RpcAddPlayer(string id, string name)
+    {
+        uiController.AddPlayer(id, name);
     }
 
+    //Called from the player controller class
+    public void RemovePlayer(GamePlayerController player)
+    {
+        var index = playerList.IndexOf(player);
+        playerList.RemoveAt(index);
+        RpcRemovePlayer(player.id);
+    }
+    [ClientRpc]
+    private void RpcRemovePlayer(string id)
+    {
+        uiController.RemovePlayer(id);
+    }
+    
     //Deeclare input Rpcs
     [ClientRpc]
     public void RpcButtonA()
     {
-        Debug.Log("Input A Pressed!");
+        var answer = levelController.GetCorrectAnswer();
+        if (answer != "A")
+        {
+            Debug.Log("Incorrect Answer");
+        }else
+        {
+            Debug.Log("Correct Answer");
+        }
     }
 
     [ClientRpc]
     public void RpcButtonB()
     {
-        Debug.Log("Input B Pressed!");
+        var answer = levelController.GetCorrectAnswer();
+        if (answer != "B")
+        {
+            Debug.Log("Incorrect Answer");
+        }
+        else
+        {
+            Debug.Log("Correct Answer");
+        }
     }
 
     [ClientRpc]
     public void RpcButtonC()
     {
-        Debug.Log("Input C Pressed!");
+        var answer = levelController.GetCorrectAnswer();
+        if (answer != "C")
+        {
+            Debug.Log("Incorrect Answer");
+        }
+        else
+        {
+            Debug.Log("Correct Answer");
+        }
     }
 
     [ClientRpc]
     public void RpcButtonD()
     {
-        Debug.Log("Input D Pressed!");
+        var answer = levelController.GetCorrectAnswer();
+        if (answer != "D")
+        {
+            Debug.Log("Incorrect Answer");
+        }
+        else
+        {
+            Debug.Log("Correct Answer");
+        }
     }
 }

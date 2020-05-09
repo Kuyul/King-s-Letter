@@ -1,33 +1,37 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class PlayerController : NetworkBehaviour
+public class GamePlayerController : NetworkBehaviour
 {
+    [SyncVar]
+    public string id;
+    [SyncVar]
+    public string playerName;
+
     public override void OnStartServer()
     {
-        base.OnStartServer();
-
-        if (isServer)
-        {
-            if (!GameNetworkManager.instance.mainClient)
-            {
-                GameControl.instance.AddPlayer(this);
-            }
-        }
+        id = Guid.NewGuid().ToString();
     }
-    
+
     private void Start()
     {
         if (isClient)
         {
             if (isLocalPlayer && !GameNetworkManager.instance.mainClient)
             {
-                Debug.Log("Is localplayer:" + isLocalPlayer);
                 LocalController.instance.SetLocalPlayer(this);
+                CmdAddPlayer();
             }
         }
+    }
+
+    [Command]
+    public void CmdAddPlayer()
+    {
+        GameControl.instance.AddPlayer(this);
     }
 
     [Command]

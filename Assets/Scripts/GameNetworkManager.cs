@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+
 using Aws.GameLift.Server;
 using Amazon.Lambda;
 using Amazon.Lambda.Model;
@@ -11,6 +12,7 @@ using Amazon.CognitoIdentity;
 using Amazon;
 using System.Text;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameNetworkManager : NetworkManager
 {
@@ -19,10 +21,11 @@ public class GameNetworkManager : NetworkManager
     private bool isGameliftServer = false;
     private static int LISTEN_PORT = 7777;
     public bool mainClient = false;
+    public Text Texttext;
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
@@ -38,13 +41,39 @@ public class GameNetworkManager : NetworkManager
             Debug.Log("** SERVER MODE **");
             isHeadlessServer = true;
             SetupServerAndGamelift();
-        } else if (PlayerPrefs.GetInt("MainClient") == 1)
+        }
+        else if (PlayerPrefs.GetInt("MainClient") == 1)
         {
             mainClient = true;
             SetupMainClient();
-        } else
+        }
+        else
         {
             SetupController();
+        }
+    }
+
+    // This is called on the server when a client disconnects
+    public override void OnServerDisconnect(NetworkConnection conn)
+    {
+        // Notify the game controller that a player disconnected
+        foreach (PlayerController player in conn.playerControllers)
+        {
+            GamePlayerController playerController = player.gameObject.GetComponent<GamePlayerController>();
+            if (playerController)
+            {
+                GameControl.instance.RemovePlayer(playerController);
+            }
+        }
+        QuitIfNoPlayers();
+    }
+
+    private void QuitIfNoPlayers()
+    {
+        // if no players are playing the game now terminate the server process
+        if (numPlayers <= 0 && isHeadlessServer)
+        {
+            TerminateSession();
         }
     }
 
@@ -98,6 +127,7 @@ public class GameNetworkManager : NetworkManager
             InvocationType = InvocationType.RequestResponse
         };
 
+        GameControl.instance.uiController.connection.text = "Creating Game Session...";
         client.InvokeAsync(request,
             (response) =>
             {
@@ -127,11 +157,15 @@ public class GameNetworkManager : NetworkManager
                         }
                         */
                     }
+                    else
+                    {
+                        GameControl.instance.uiController.connection.text = "Something went wrong in creating Game Session";
+                    }
                 }
                 else
                 {
                     Debug.LogError(response.Exception);
-                    //uiController.SetStatusText($"Client service failed: {response.Exception}");
+                    GameControl.instance.uiController.connection.text = response.Exception.ToString();
                 }
             });
     }
