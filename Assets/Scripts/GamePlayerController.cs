@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,9 +10,47 @@ public class GamePlayerController : NetworkBehaviour
     [SyncVar]
     public string playerName;
 
+    private List<string> adjectives = new List<string>
+    {
+        "Groovy",
+        "Crazy-legs",
+        "Very Tactful",
+        "Creepy",
+        "Fluffy",
+        "Zippy",
+        "Fiercely Loyal",
+        "Magical",
+        "Metal"
+    };
+
     public override void OnStartServer()
     {
-        id = Guid.NewGuid().ToString();
+        base.OnStartServer();
+        if (isServer && !GameNetworkManager.instance.mainClient)
+        {
+            id = System.Guid.NewGuid().ToString();
+            playerName = adjectives[Random.Range(0, adjectives.Count - 1)];
+            RpcAddPlayer(id, playerName);
+        }
+    }
+
+    //Called from the server whenever a new player joins the game
+    [ClientRpc]
+    public void RpcAddPlayer(string pId, string pName)
+    {
+        if (GameNetworkManager.instance.mainClient)
+        {
+            GameNetworkManager.instance.uiController.AddPlayer(pId, pName);
+        }
+    }
+
+    [ClientRpc]
+    public void RpcRemovePlayer()
+    {
+        if (GameNetworkManager.instance.mainClient)
+        {
+            GameNetworkManager.instance.uiController.RemovePlayer(id);
+        }
     }
 
     private void Start()
@@ -31,30 +68,32 @@ public class GamePlayerController : NetworkBehaviour
     [Command]
     public void CmdAddPlayer()
     {
-        GameControl.instance.AddPlayer(this);
+        GameNetworkManager.instance.gameController.AddPlayer(this);
+        RpcAddPlayer(id, playerName);
     }
 
+    //Called from the controller to invoke a function on the main client
     [Command]
-    public void CmdButtonA()
+    public void CmdButton(string button)
     {
-        GameControl.instance.RpcButtonA();
+        RpcButton(button);
     }
 
-    [Command]
-    public void CmdButtonB()
+    [ClientRpc]
+    public void RpcButton(string button)
     {
-        GameControl.instance.RpcButtonB();
+        if (GameNetworkManager.instance.mainClient)
+        {
+            var answer = GameNetworkManager.instance.levelController.GetCorrectAnswer();
+            if (answer != button)
+            {
+                Debug.Log("Incorrect Answer");
+            }
+            else
+            {
+                Debug.Log("Correct Answer");
+            }
+        }
     }
 
-    [Command]
-    public void CmdButtonC()
-    {
-        GameControl.instance.RpcButtonC();
-    }
-
-    [Command]
-    public void CmdButtonD()
-    {
-        GameControl.instance.RpcButtonD();
-    }
 }

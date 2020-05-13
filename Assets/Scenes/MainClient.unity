@@ -222,10 +222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf628660d3cfad498e4e2810e6545e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiController: {fileID: 1018999276}
-  postLoad: {fileID: 911910482}
-  waiting: {fileID: 6692162922577284670}
-  levelController: {fileID: 498005660}
 --- !u!114 &107324273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,7 +253,7 @@ MonoBehaviour:
     i13: 0
     i14: 0
     i15: 0
-  m_ServerOnly: 0
+  m_ServerOnly: 1
   m_LocalPlayerAuthority: 0
 --- !u!1 &170076733
 GameObject:
@@ -493,6 +489,9 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
+  gameController: {fileID: 107324272}
+  levelController: {fileID: 498005660}
+  uiController: {fileID: 1018999276}
   mainClient: 0
   Texttext: {fileID: 6692162923846516149}
 --- !u!4 &451171813
@@ -896,6 +895,8 @@ MonoBehaviour:
   connection: {fileID: 6692162923846516149}
   playerUI: {fileID: 2814294379404114593, guid: a869f4173ae542248a49117b8fda9bdd,
     type: 3}
+  postLoad: {fileID: 911910482}
+  waiting: {fileID: 6692162922577284670}
   playerSlotOffset: 20
   playerInfo: {fileID: 6692162921730786174}
   gameNetworkManager: {fileID: 451171812}

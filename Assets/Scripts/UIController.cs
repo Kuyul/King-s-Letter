@@ -6,8 +6,12 @@ using UnityEngine.Networking;
 
 public class UIController : MonoBehaviour
 {
+    //Declare public Gameobjects
     public Text connection;
     public GameObject playerUI;
+    public GameObject postLoad;
+    public GameObject waiting;
+
     public float playerSlotOffset = 20f;
     public RectTransform playerInfo;
     public GameNetworkManager gameNetworkManager;
@@ -22,18 +26,21 @@ public class UIController : MonoBehaviour
         // default to 1 so if the scene is started in editor, debug HUD shows
         netHUD.showGUI = PlayerPrefs.GetInt("ShowUnityHUD", 1) == 1;
     }
-    
+
     private void OnDisable()
     {
         var netHUD = gameNetworkManager.GetComponent<NetworkManagerHUD>();
         netHUD.showGUI = false;
     }
 
+    //Called on Start Game button press on the main client
     public void StartGame()
     {
-        GameControl.instance.StartGame();
+        waiting.SetActive(false);
+        postLoad.SetActive(true);
     }
 
+    //Called from PlayerController to update UI when a new player joins
     public void AddPlayer(string playerId, string playerName)
     {
         var newUiObj = Instantiate(playerUI, playerInfo);
@@ -50,7 +57,7 @@ public class UIController : MonoBehaviour
         UpdatePlayer();
     }
 
-    public void UpdatePlayer()
+    private void UpdatePlayer()
     {
         var offset = 0f;
         foreach (string key in playerUiList.Keys)

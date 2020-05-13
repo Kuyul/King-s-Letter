@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class LevelControl : MonoBehaviour
 {
-    public static LevelControl instance;
-
     //Make objects public so you can manually assign objects from screen
     public GameObject Letter;
     public GameObject[] ButtonPos;
@@ -18,14 +16,6 @@ public class LevelControl : MonoBehaviour
     private GameObject levelStamp;
     private string correctAnswer;
     private string[] answerChoices = { "A", "B", "C", "D" };
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-    }
 
     public string GetCorrectAnswer()
     {

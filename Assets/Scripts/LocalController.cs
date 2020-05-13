@@ -22,29 +22,15 @@ public class LocalController : MonoBehaviour
         }
     }
 
+    //This method is called from the GamePlayerController when a remote client joins as a controller
     public void SetLocalPlayer(GamePlayerController p)
     {
         player = p;
         info.text = "connected to " + networkManager.networkAddress + ", port: " + networkManager.networkPort;
     }
 
-    public void ButtonA()
+    public void PressButton(string button)
     {
-        player.CmdButtonA();
-    }
-
-    public void ButtonB()
-    {
-        player.CmdButtonB();
-    }
-
-    public void ButtonC()
-    {
-        player.CmdButtonC();
-    }
-
-    public void ButtonD()
-    {
-        player.CmdButtonD();
+        player.CmdButton(button);
     }
 }

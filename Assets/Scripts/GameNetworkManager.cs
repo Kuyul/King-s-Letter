@@ -13,15 +13,35 @@ using Amazon;
 using System.Text;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 public class GameNetworkManager : NetworkManager
 {
+    //Declare public variables
     public static GameNetworkManager instance;
+    public GameControl gameController;
+    public LevelControl levelController;
+    public UIController uiController;
+    public bool mainClient = false;
+    public Text Texttext;
+
+    //Declare private variables
     private bool isHeadlessServer = false;
     private bool isGameliftServer = false;
     private static int LISTEN_PORT = 7777;
-    public bool mainClient = false;
-    public Text Texttext;
+
+    [System.Serializable]
+    public class InnerObject
+    {
+        public string IpAddress;
+        public string Port;
+    }
+
+    [System.Serializable]
+    public class ConnectionObject
+    {
+        public InnerObject GameSessionConnectionInfo;
+    }
 
     private void Awake()
     {
@@ -62,7 +82,7 @@ public class GameNetworkManager : NetworkManager
             GamePlayerController playerController = player.gameObject.GetComponent<GamePlayerController>();
             if (playerController)
             {
-                GameControl.instance.RemovePlayer(playerController);
+                playerController.RpcRemovePlayer();
             }
         }
         QuitIfNoPlayers();
@@ -71,7 +91,7 @@ public class GameNetworkManager : NetworkManager
     private void QuitIfNoPlayers()
     {
         // if no players are playing the game now terminate the server process
-        if (numPlayers <= 0 && isHeadlessServer)
+        if (numPlayers <= 1 && isHeadlessServer)
         {
             TerminateSession();
         }
@@ -127,7 +147,7 @@ public class GameNetworkManager : NetworkManager
             InvocationType = InvocationType.RequestResponse
         };
 
-        GameControl.instance.uiController.connection.text = "Creating Game Session...";
+        SetUIText("Creating Game Session...");
         client.InvokeAsync(request,
             (response) =>
             {
@@ -140,8 +160,8 @@ public class GameNetworkManager : NetworkManager
                         networkAddress = "localhost";
                         networkPort = 7777;
                         StartClient();
-                        GameControl.instance.uiController.connection.text = "connected to " + networkAddress + " " + networkPort;
-                        /*
+                        SetUIText("connected to " + networkAddress + " " + networkPort);
+
                         var connectionObj = JsonUtility.FromJson<ConnectionObject>(payload);
 
                         if (connectionObj.GameSessionConnectionInfo.Port == null)
@@ -155,17 +175,16 @@ public class GameNetworkManager : NetworkManager
                             networkPort = Int32.Parse(connectionObj.GameSessionConnectionInfo.Port);
                             StartClient();
                         }
-                        */
                     }
                     else
                     {
-                        GameControl.instance.uiController.connection.text = "Something went wrong in creating Game Session";
+                        SetUIText("Something went wrong in creating Game Session");
                     }
                 }
                 else
                 {
                     Debug.LogError(response.Exception);
-                    GameControl.instance.uiController.connection.text = response.Exception.ToString();
+                    SetUIText(response.Exception.ToString());
                 }
             });
     }
@@ -245,4 +264,11 @@ public class GameNetworkManager : NetworkManager
         Application.Quit();
     }
 
+    private void SetUIText(string val)
+    {
+        if (mainClient)
+        {
+            uiController.connection.text = val;
+        }
+    }
 }
