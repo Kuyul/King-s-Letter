@@ -29,8 +29,9 @@ public class GamePlayerController : NetworkBehaviour
         if (isServer && !GameNetworkManager.instance.mainClient)
         {
             id = System.Guid.NewGuid().ToString();
-            playerName = adjectives[Random.Range(0, adjectives.Count - 1)];
-            RpcAddPlayer(id, playerName);
+            var p = adjectives[Random.Range(0, adjectives.Count - 1)];
+            playerName = p;
+            RpcAddPlayer(id, p);
         }
     }
 
@@ -43,6 +44,7 @@ public class GamePlayerController : NetworkBehaviour
             GameNetworkManager.instance.uiController.AddPlayer(pId, pName);
         }
     }
+
 
     [ClientRpc]
     public void RpcRemovePlayer()
@@ -69,29 +71,28 @@ public class GamePlayerController : NetworkBehaviour
     public void CmdAddPlayer()
     {
         GameNetworkManager.instance.gameController.AddPlayer(this);
-        RpcAddPlayer(id, playerName);
     }
 
     //Called from the controller to invoke a function on the main client
     [Command]
     public void CmdButton(string button)
     {
-        RpcButton(button);
+        RpcButton(button, playerName);
     }
 
     [ClientRpc]
-    public void RpcButton(string button)
+    public void RpcButton(string button, string buttonPlayerName)
     {
         if (GameNetworkManager.instance.mainClient)
         {
             var answer = GameNetworkManager.instance.levelController.GetCorrectAnswer();
             if (answer != button)
             {
-                Debug.Log("Incorrect Answer");
+                Debug.Log("Incorrect Answer by " + buttonPlayerName);
             }
             else
             {
-                Debug.Log("Correct Answer");
+                Debug.Log("Correct Answer by " + buttonPlayerName);
             }
         }
     }
