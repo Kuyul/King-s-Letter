@@ -23,18 +23,6 @@ public class GamePlayerController : NetworkBehaviour
         "Metal"
     };
 
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-        if (isServer && !GameNetworkManager.instance.mainClient)
-        {
-            id = System.Guid.NewGuid().ToString();
-            var p = adjectives[Random.Range(0, adjectives.Count - 1)];
-            playerName = p;
-            RpcAddPlayer(id, p);
-        }
-    }
-
     //Called from the server whenever a new player joins the game
     [ClientRpc]
     public void RpcAddPlayer(string pId, string pName)
@@ -62,22 +50,25 @@ public class GamePlayerController : NetworkBehaviour
             if (isLocalPlayer && !GameNetworkManager.instance.mainClient)
             {
                 LocalController.instance.SetLocalPlayer(this);
-                CmdAddPlayer();
+                id = System.Guid.NewGuid().ToString();
+                playerName = adjectives[Random.Range(0, adjectives.Count - 1)];
+                CmdAddPlayer(id, playerName);
             }
         }
     }
 
     [Command]
-    public void CmdAddPlayer()
+    public void CmdAddPlayer(string pid, string pName)
     {
         GameNetworkManager.instance.gameController.AddPlayer(this);
+        RpcAddPlayer(pid, pName);
     }
 
     //Called from the controller to invoke a function on the main client
     [Command]
-    public void CmdButton(string button)
+    public void CmdButton(string button, string pName)
     {
-        RpcButton(button, playerName);
+        RpcButton(button, pName);
     }
 
     [ClientRpc]

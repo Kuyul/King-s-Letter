@@ -31,6 +31,6 @@ public class LocalController : MonoBehaviour
 
     public void PressButton(string button)
     {
-        player.CmdButton(button);
+        player.CmdButton(button, player.playerName);
     }
 }
